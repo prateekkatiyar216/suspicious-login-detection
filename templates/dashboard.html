@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #0066cc;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Dashboard</h1>
+
+  <h2>Registered Users</h2>
+  <table>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>IP Address</th>
+      <th>Approx. Location (IP)</th>
+      <th>GPS Location</th>
+      <th>Country (GPS)</th>
+      <th>Registration Time</th>
+      <th>Status</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+      <td>{{ user[0] }}</td>  <!-- username -->
+      <td>{{ user[1] }}</td>  <!-- email -->
+      <td>{{ user[2] }}</td>  <!-- IP address -->
+      <td>{{ user[4] }}</td>  <!-- location from IP -->
+      <td>
+        {% if user[6] and user[6] != 'Unknown' %}
+          {{ user[6] }}<br>
+          <a href="https://www.google.com/maps?q={{ user[6] }}" target="_blank">📍 View on Map</a>
+        {% else %}
+          Unknown
+        {% endif %}
+      </td>
+      <td>{{ user[7] }}</td>  <!-- country_from_gps -->
+      <td>{{ user[3] }}</td>  <!-- registration time -->
+      <td>{{ user[5] }}</td>  <!-- status -->
+    </tr>
+    {% endfor %}
+  </table>
+
+<h2>Login Attempts</h2>
+<table>
+  <tr>
+    <th>Username</th>
+    <th>IP Address</th>
+    <th>Approx. Location (IP)</th>
+    <th>GPS Location</th>
+    <th>Country (GPS)</th>
+    <th>Login Time</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  {% for login in logins %}
+  <tr
+    {% if login[7] == 'Normal' %}
+      style="background-color: #d4edda;"  <!-- Green -->
+    {% elif login[7] == 'Suspicious' %}
+      style="background-color: #fff3cd;"  <!-- Yellow -->
+    {% elif login[7] == 'Blocked User' %}
+      style="background-color: #f8d7da;"  <!-- Red -->
+    {% endif %}
+  >
+    <td>{{ login[1] }}</td>
+    <td>{{ login[2] }}</td>
+    <td>{{ login[4] }}</td>
+    <td>
+      {% if login[5] and login[5] != 'Unknown' %}
+        {{ login[5] }}<br>
+        <a href="https://www.google.com/maps?q={{ login[5] }}" target="_blank" style="color:#007bff;">📍 View</a>
+      {% else %}
+        Unknown
+      {% endif %}
+    </td>
+    <td>{{ login[6] }}</td>
+    <td>{{ login[3] }}</td>
+    <td><strong>{{ login[7] }}</strong></td>
+
+    <!-- Styled Action Column -->
+    <td>
+      <form method="POST" action="/update-status" style="display: flex; align-items: center;">
+        <input type="hidden" name="attempt_id" value="{{ login[0] }}">
+        <select name="status"
+          style="
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+          ">
+          <option value="Normal" {% if login[7] == 'Normal' %}selected{% endif %}>Normal</option>
+          <option value="Suspicious" {% if login[7] == 'Suspicious' %}selected{% endif %}>Suspicious</option>
+          <option value="Blocked User" {% if login[7] == 'Blocked User' %}selected{% endif %}>Blocked</option>
+        </select>
+        <button type="submit"
+          style="
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          "
+          onmouseover="this.style.backgroundColor='#138496';"
+          onmouseout="this.style.backgroundColor='#17a2b8';"
+        >✔️</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+
+</body>
+</html>

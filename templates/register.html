@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 350px;
+    }
+    .form-container h2 {
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
+      background-color: #1e7e34;
+    }
+    .link {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .link a {
+      text-decoration: none;
+      color: #0066cc;
+    }
+  </style>
+</head>
+
+<body onload="getLocation()">
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <form method="POST">
+      <input name="username" placeholder="Username" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <input name="confirm" type="password" placeholder="Re-enter Password" required>
+
+      <!-- Hidden fields for GPS -->
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
+
+      <!-- Disabled button until location is captured -->
+      <button type="submit" id="submitBtn" disabled>Register</button>
+    </form>
+
+    <div class="link">
+      Already have an account? <a href="/login">Login here</a>
+    </div>
+  </div>
+
+<script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+
+            document.getElementById("submitBtn").disabled = false;
+
+            console.log("GPS Location Captured:", position.coords.latitude, position.coords.longitude);
+        }, function() {
+            alert("Please allow location access.");
+        });
+    } else {
+        alert("Geolocation not supported by your browser.");
+    }
+}
+</script>
+
+</body>
+</html>
