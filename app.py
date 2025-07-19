@@ -9,11 +9,12 @@ app.secret_key = 'your_secret_key'  # Change this to a secure value
 
 # MySQL Database Connection
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",         # 🔁 Replace with your MySQL username
-    password="9044", # 🔁 Replace with your MySQL password
-    database="user_system"
+    host="db4free.net",
+    user="prateek",         # Use your db4free username
+    password="katiyar123",     # Use your db4free password
+    database="user_system"          # Same as the one you created
 )
+
 cursor = db.cursor()
 
 # Utility to get client's real IP address
