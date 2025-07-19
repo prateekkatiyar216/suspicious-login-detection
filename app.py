@@ -10,10 +10,12 @@ app.secret_key = 'your_secret_key'  # Change this to a secure value
 # MySQL Database Connection
 db = mysql.connector.connect(
     host="db4free.net",
-    user="prateek",         # Use your db4free username
-    password="katiyar123",     # Use your db4free password
-    database="user_system"          # Same as the one you created
+    user="prateek",
+    password="katiyar123",
+    database="user_system",
+    port=3306
 )
+
 
 cursor = db.cursor()
 
